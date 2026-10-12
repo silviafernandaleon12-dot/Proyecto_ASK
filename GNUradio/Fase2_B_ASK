@@ -1,0 +1,2199 @@
+options:
+  parameters:
+    alias: ''
+    author: Silvia Fernanda Leon Rodriguez; Jose Manuel Serrano Sarmiento
+    catch_exceptions: 'True'
+    comment: ''
+    copyright: ''
+    description: 'Continuidad ASK: funciones Tx de la base Guia 2 y receptor validado del grupo. Simulacion sin hardware SDR.'
+    gen_linking: dynamic
+    generate_options: qt_gui
+    generator_class_name: PythonQtGuiGenerator
+    generator_module: gnuradio.grc.workflows.python_qt_gui
+    hier_block_src_path: '.:'
+    id: ASK_Guia2
+    max_nouts: '0'
+    output_language: python
+    qt_qss_theme: ''
+    realtime_scheduling: ''
+    run: 'True'
+    run_command: '{python} -u {filename}'
+    thread_safe_setters: ''
+    title: ASK - Guia 2 - Tx, canal y receptor
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 8
+    - 8
+    rotation: 0
+    state: enabled
+blocks:
+- name: M
+  id: variable
+  parameters:
+    comment: ''
+    value: len(tabla_de_verdad_constelacion)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 368
+    - 8
+    rotation: 0
+    state: enabled
+- name: Rb
+  id: variable
+  parameters:
+    comment: ''
+    value: Rs*bps
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 632
+    - 8
+    rotation: 0
+    state: enabled
+- name: Rs
+  id: variable
+  parameters:
+    comment: ''
+    value: '32000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 208
+    - 8
+    rotation: 0
+    state: enabled
+- name: Sps
+  id: variable
+  parameters:
+    comment: ''
+    value: '8'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 288
+    - 8
+    rotation: 0
+    state: enabled
+- name: bps
+  id: variable
+  parameters:
+    comment: ''
+    value: int(math.log(M,2))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 528
+    - 8
+    rotation: 0
+    state: enabled
+- name: interferencia_amp
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 1,1,1,2
+    label: Amplitud interferencia (0 = apagada)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '0'
+    step: '0.05'
+    stop: '1'
+    value: '0'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 776
+    - 104
+    rotation: 0
+    state: enabled
+- name: n_taps
+  id: variable
+  parameters:
+    comment: ''
+    value: span*Sps+1
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1168
+    - 8
+    rotation: 0
+    state: enabled
+- name: noise_amp
+  id: variable
+  parameters:
+    comment: ''
+    value: ruido_activo*math.sqrt(potencia_tx/10**(snr_db/10))
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1040
+    - 200
+    rotation: 0
+    state: enabled
+- name: ruido_activo
+  id: variable_qtgui_check_box
+  parameters:
+    comment: ''
+    'false': '0'
+    gui_hint: 0,0,1,1
+    label: Activar ruido AWGN
+    'true': '1'
+    type: int
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 344
+    - 104
+    rotation: 0
+    state: enabled
+- name: samp_rate
+  id: variable
+  parameters:
+    comment: ''
+    value: Rs*Sps
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1064
+    - 8
+    rotation: 0
+    state: enabled
+- name: snr_db
+  id: variable_qtgui_range
+  parameters:
+    comment: ''
+    gui_hint: 1,0,1,1
+    label: SNR nominal (dB)
+    min_len: '200'
+    orient: QtCore.Qt.Horizontal
+    rangeType: float
+    start: '-4'
+    step: '2'
+    stop: '20'
+    value: '8'
+    widget: counter_slider
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 536
+    - 104
+    rotation: 0
+    state: enabled
+- name: tabla_de_verdad_constelacion
+  id: variable
+  parameters:
+    comment: ''
+    value: (0.5+0j, 1.0+0j)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 176
+    - 104
+    rotation: 0
+    state: enabled
+- name: alinear_rx
+  id: blocks_skiphead
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_items: n_taps-1
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 424
+    - 760
+    rotation: 0
+    state: enabled
+- name: analog_noise_source_x_0
+  id: analog_noise_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: noise_amp
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    noise_type: analog.GR_GAUSSIAN
+    seed: '0'
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1120
+    - 472
+    rotation: 0
+    state: enabled
+- name: analog_random_source_x_0
+  id: analog_random_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    max: '2'
+    maxoutbuf: '0'
+    min: '0'
+    minoutbuf: '0'
+    num_samps: '100000'
+    repeat: 'True'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 48
+    - 312
+    rotation: 0
+    state: enabled
+- name: analog_sig_source_x_0
+  id: analog_sig_source_x
+  parameters:
+    affinity: ''
+    alias: ''
+    amp: interferencia_amp
+    comment: ''
+    freq: '1000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    offset: '0'
+    phase: '0'
+    samp_rate: samp_rate
+    showports: 'False'
+    type: complex
+    waveform: analog.GR_SIN_WAVE
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1360
+    - 472
+    rotation: 0
+    state: enabled
+- name: ber_media
+  id: blocks_moving_average_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    length: '10000'
+    max_iter: '4000'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: 1/10000
+    type: float
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1368
+    - 1040
+    rotation: 0
+    state: enabled
+- name: blocks_add_xx_0
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1520
+    - 328
+    rotation: 0
+    state: enabled
+- name: blocks_add_xx_1
+  id: blocks_add_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1296
+    - 328
+    rotation: 0
+    state: enabled
+- name: blocks_complex_to_mag_0
+  id: blocks_complex_to_mag
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 840
+    - 760
+    rotation: 0
+    state: enabled
+- name: blocks_float_to_uchar_0
+  id: blocks_float_to_uchar
+  parameters:
+    affinity: ''
+    alias: ''
+    bias: '0'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    scale: '1'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1232
+    - 752
+    rotation: 0
+    state: enabled
+- name: blocks_threshold_ff_0
+  id: blocks_threshold_ff
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    high: '0.75'
+    init: '0'
+    low: '0.75'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1056
+    - 736
+    rotation: 0
+    state: enabled
+- name: comparar_bits
+  id: blocks_xor_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_inputs: '2'
+    type: byte
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1024
+    - 1040
+    rotation: 0
+    state: enabled
+- name: digital_chunks_to_symbols_xx_0
+  id: digital_chunks_to_symbols_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    dimension: '1'
+    in_type: byte
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    num_ports: '1'
+    out_type: complex
+    symbol_table: tabla_de_verdad_constelacion
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 520
+    - 312
+    rotation: 0
+    state: enabled
+- name: errores_float
+  id: blocks_uchar_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1152
+    - 1040
+    rotation: 0
+    state: enabled
+- name: import_0
+  id: import
+  parameters:
+    alias: ''
+    comment: ''
+    imports: import math; from gnuradio import gr; from gnuradio.filter import firdes; import numpy as np; np.random.seed(27145)
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1392
+    - 8
+    rotation: 0
+    state: enabled
+- name: muestrear
+  id: blocks_keep_m_in_n
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    m: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    n: Sps
+    offset: '0'
+    type: complex
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 624
+    - 760
+    rotation: 0
+    state: enabled
+- name: ojo
+  id: qtgui_eye_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: blue
+    color2: blue
+    color3: blue
+    color4: blue
+    color5: blue
+    color6: blue
+    color7: blue
+    color8: blue
+    color9: blue
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: vistas@4:0,0,1,1
+    label1: I despues del RRC receptor
+    label10: Signal 10
+    label2: Q despues del filtro Rx
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    nconnections: '1'
+    samp_per_symbol: Sps
+    size: '1024'
+    srate: samp_rate
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1.8'
+    ymin: '-0.3'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 384
+    - 896
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'True'
+    gui_hint: vistas@1:0,2,1,1
+    label1: '"Señal ruidosa"'
+    label10: '""'
+    label2: '""'
+    label3: '""'
+    label4: '""'
+    label5: '""'
+    label6: '""'
+    label7: '""'
+    label8: '""'
+    label9: '""'
+    legend: 'False'
+    marker1: '0'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Rx: simbolos recuperados"'
+    nconnections: '1'
+    size: '2048'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-0.5'
+    ymax: '1'
+    ymin: '-1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 640
+    - 896
+    rotation: 0
+    state: enabled
+- name: qtgui_const_sink_x_0_0
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'True'
+    gui_hint: vistas@1:0,0,1,1
+    label1: '"Señal ruidosa"'
+    label10: '""'
+    label2: '""'
+    label3: '""'
+    label4: '""'
+    label5: '""'
+    label6: '""'
+    label7: '""'
+    label8: '""'
+    label9: '""'
+    legend: 'False'
+    marker1: '0'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Tx: simbolos originales"'
+    nconnections: '1'
+    size: '2048'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-0.5'
+    ymax: '1'
+    ymin: '-1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 536
+    - 520
+    rotation: 0
+    state: enabled
+- name: qtgui_number_sink_0
+  id: qtgui_number_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    autoscale: 'True'
+    avg: '0'
+    color1: ("black", "black")
+    color10: ("black", "black")
+    color2: ("black", "black")
+    color3: ("black", "black")
+    color4: ("black", "black")
+    color5: ("black", "black")
+    color6: ("black", "black")
+    color7: ("black", "black")
+    color8: ("black", "black")
+    color9: ("black", "black")
+    comment: ''
+    factor1: '1'
+    factor10: '1'
+    factor2: '1'
+    factor3: '1'
+    factor4: '1'
+    factor5: '1'
+    factor6: '1'
+    factor7: '1'
+    factor8: '1'
+    factor9: '1'
+    graph_type: qtgui.NUM_GRAPH_NONE
+    gui_hint: 0,2,1,1
+    label1: Fraccion de bits incorrectos
+    label10: ''
+    label2: ''
+    label3: ''
+    label4: ''
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    max: '1'
+    min: '0'
+    name: '"BER (ultimos 10000 bits)"'
+    nconnections: '1'
+    type: float
+    unit1: ''
+    unit10: ''
+    unit2: ''
+    unit3: ''
+    unit4: ''
+    unit5: ''
+    unit6: ''
+    unit7: ''
+    unit8: ''
+    unit9: ''
+    update_time: '0.1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1592
+    - 1040
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: vistas@2:0,1,1,1
+    label1: Canal I
+    label10: Signal 10
+    label2: Canal Q
+    label3: Rx I
+    label4: Rx Q
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Envolvente compleja Rx"'
+    nconnections: '2'
+    size: '256'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '2'
+    ymin: '-2'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1760
+    - 840
+    rotation: 0
+    state: enabled
+- name: qtgui_time_sink_x_0_0
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'True'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'True'
+    grid: 'True'
+    gui_hint: vistas@2:0,0,1,1
+    label1: I
+    label10: Signal 10
+    label2: Q
+    label3: Signal 3
+    label4: Signal 4
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '-1'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Envolvente compleja Tx"'
+    nconnections: '1'
+    size: '256'
+    srate: samp_rate
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '1'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '2'
+    ymin: '-2'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 744
+    - 520
+    rotation: 0
+    state: enabled
+- name: root_raised_cosine_filter_0
+  id: root_raised_cosine_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: beta
+    comment: ''
+    decim: '1'
+    gain: Sps
+    interp: Sps
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ntaps: n_taps
+    samp_rate: samp_rate
+    sym_rate: Rs
+    type: interp_fir_filter_ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 800
+    - 312
+    rotation: 0
+    state: enabled
+- name: root_raised_cosine_filter_0_0
+  id: root_raised_cosine_filter
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha: beta
+    comment: ''
+    decim: '1'
+    gain: '1'
+    interp: '1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    ntaps: n_taps
+    samp_rate: samp_rate
+    sym_rate: Rs
+    type: fir_filter_ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 200
+    - 736
+    rotation: 0
+    state: enabled
+- name: throttle_0
+  id: blocks_throttle2
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    ignoretag: 'True'
+    limit: auto
+    maximum: '0.1'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    samples_per_second: samp_rate
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1064
+    - 312
+    rotation: 0
+    state: enabled
+- name: vistas
+  id: qtgui_tab_widget
+  parameters:
+    alias: ''
+    comment: ''
+    gui_hint: 2,0,8,3
+    label0: Bits Tx / Rx
+    label1: Constelaciones
+    label10: Tab 10
+    label11: Tab 11
+    label12: Tab 12
+    label13: Tab 13
+    label14: Tab 14
+    label15: Tab 15
+    label16: Tab 16
+    label17: Tab 17
+    label18: Tab 18
+    label19: Tab 19
+    label2: Tiempo
+    label3: PSD
+    label4: Diagrama de ojo
+    label5: Tab 5
+    label6: Tab 6
+    label7: Tab 7
+    label8: Tab 8
+    label9: Tab 9
+    num_tabs: '5'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1400
+    - 104
+    rotation: 0
+    state: enabled
+- name: bits_to_symbols
+  id: blocks_repack_bits_bb
+  parameters:
+    affinity: ''
+    alias: ''
+    align_output: 'False'
+    comment: ''
+    endianness: gr.GR_MSB_FIRST
+    k: '1'
+    l: bps
+    len_tag_key: '""'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 272
+    - 312
+    rotation: 0
+    state: enabled
+- name: beta
+  id: variable
+  parameters:
+    value: '0.35'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 760
+    - 8
+    rotation: 0
+    state: enabled
+- name: span
+  id: variable
+  parameters:
+    value: '12'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 864
+    - 8
+    rotation: 0
+    state: enabled
+- name: taps_tx
+  id: variable
+  parameters:
+    value: firdes.root_raised_cosine(Sps,samp_rate,Rs,beta,n_taps)
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1040
+    - 104
+    rotation: 0
+    state: enabled
+- name: potencia_tx
+  id: variable
+  parameters:
+    value: 0.5625*sum(sum(taps_tx[p::Sps])**2 for p in range(Sps))/Sps + 0.0625*sum(t*t for t in taps_tx)/Sps
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1248
+    - 104
+    rotation: 0
+    state: enabled
+- name: fft_size
+  id: variable
+  parameters:
+    value: '2048'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 952
+    - 8
+    rotation: 0
+    state: enabled
+- name: constelacion_canal
+  id: qtgui_const_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    comment: ''
+    grid: 'True'
+    gui_hint: vistas@1:0,1,1,1
+    label1: '"Señal ruidosa"'
+    label10: '""'
+    label2: '""'
+    label3: '""'
+    label4: '""'
+    label5: '""'
+    label6: '""'
+    label7: '""'
+    label8: '""'
+    label9: '""'
+    legend: 'False'
+    marker1: '0'
+    marker10: '-1'
+    marker2: '-1'
+    marker3: '-1'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Canal: antes del receptor"'
+    nconnections: '1'
+    size: '2048'
+    style1: '0'
+    style10: '0'
+    style2: '0'
+    style3: '0'
+    style4: '0'
+    style5: '0'
+    style6: '0'
+    style7: '0'
+    style8: '0'
+    style9: '0'
+    tr_chan: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: complex
+    update_time: '0.10'
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    xmax: '2'
+    xmin: '-0.5'
+    ymax: '1'
+    ymin: '-1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1568
+    - 520
+    rotation: 0
+    state: enabled
+- name: ojo_componente_i
+  id: blocks_complex_to_real
+  parameters:
+    vlen: '1'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 200
+    - 920
+    rotation: 0
+    state: enabled
+- name: bits_tx_float
+  id: blocks_uchar_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 208
+    - 1080
+    rotation: 0
+    state: enabled
+- name: bits_rx_float
+  id: blocks_uchar_to_float
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 208
+    - 1176
+    rotation: 0
+    state: enabled
+- name: comparacion_bits
+  id: qtgui_time_sink_x
+  parameters:
+    affinity: ''
+    alias: ''
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    autoscale: 'False'
+    axislabels: 'True'
+    color1: blue
+    color10: dark blue
+    color2: red
+    color3: green
+    color4: black
+    color5: cyan
+    color6: magenta
+    color7: yellow
+    color8: dark red
+    color9: dark green
+    comment: ''
+    ctrlpanel: 'False'
+    entags: 'False'
+    grid: 'True'
+    gui_hint: vistas@0:0,0,1,1
+    label1: Bits Tx
+    label10: Signal 10
+    label2: Bits Rx
+    label3: Error XOR (1 = diferente)
+    label4: Rx Q
+    label5: Signal 5
+    label6: Signal 6
+    label7: Signal 7
+    label8: Signal 8
+    label9: Signal 9
+    legend: 'True'
+    marker1: '0'
+    marker10: '-1'
+    marker2: '1'
+    marker3: '0'
+    marker4: '-1'
+    marker5: '-1'
+    marker6: '-1'
+    marker7: '-1'
+    marker8: '-1'
+    marker9: '-1'
+    name: '"Comparacion alineada: 64 bits (Tx azul / Rx rojo / error verde)"'
+    nconnections: '3'
+    size: '64'
+    srate: Rb
+    stemplot: 'False'
+    style1: '1'
+    style10: '1'
+    style2: '2'
+    style3: '1'
+    style4: '1'
+    style5: '1'
+    style6: '1'
+    style7: '1'
+    style8: '1'
+    style9: '1'
+    tr_chan: '0'
+    tr_delay: '0'
+    tr_level: '0.0'
+    tr_mode: qtgui.TRIG_MODE_FREE
+    tr_slope: qtgui.TRIG_SLOPE_POS
+    tr_tag: '""'
+    type: float
+    update_time: '0.10'
+    width1: '2'
+    width10: '1'
+    width2: '2'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    ylabel: Amplitude
+    ymax: '1.3'
+    ymin: '-0.2'
+    yunit: '""'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 440
+    - 1080
+    rotation: 0
+    state: enabled
+- name: psd_tx
+  id: logpwrfft_x
+  parameters:
+    type: complex
+    sample_rate: samp_rate
+    fft_size: fft_size
+    ref_scale: 2*math.sqrt(samp_rate/fft_size)
+    frame_rate: '20'
+    average: 'True'
+    avg_alpha: '0.2'
+    shift: 'True'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 176
+    - 1376
+    rotation: 0
+    state: enabled
+- name: psd_canal
+  id: logpwrfft_x
+  parameters:
+    type: complex
+    sample_rate: samp_rate
+    fft_size: fft_size
+    ref_scale: 2*math.sqrt(samp_rate/fft_size)
+    frame_rate: '20'
+    average: 'True'
+    avg_alpha: '0.2'
+    shift: 'True'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 672
+    - 1376
+    rotation: 0
+    state: enabled
+- name: psd_ruido
+  id: logpwrfft_x
+  parameters:
+    type: complex
+    sample_rate: samp_rate
+    fft_size: fft_size
+    ref_scale: 2*math.sqrt(samp_rate/fft_size)
+    frame_rate: '20'
+    average: 'True'
+    avg_alpha: '0.2'
+    shift: 'True'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1168
+    - 1376
+    rotation: 0
+    state: enabled
+- name: psd_tono
+  id: logpwrfft_x
+  parameters:
+    type: complex
+    sample_rate: samp_rate
+    fft_size: fft_size
+    ref_scale: 2*math.sqrt(samp_rate/fft_size)
+    frame_rate: '20'
+    average: 'True'
+    avg_alpha: '0.2'
+    shift: 'True'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1664
+    - 1376
+    rotation: 0
+    state: enabled
+- name: vista_psd
+  id: qtgui_vector_sink_f
+  parameters:
+    alpha1: '1.0'
+    alpha10: '1.0'
+    alpha2: '1.0'
+    alpha3: '1.0'
+    alpha4: '1.0'
+    alpha5: '1.0'
+    alpha6: '1.0'
+    alpha7: '1.0'
+    alpha8: '1.0'
+    alpha9: '1.0'
+    color1: '"blue"'
+    color10: '"dark blue"'
+    color2: '"red"'
+    color3: '"green"'
+    color4: '"black"'
+    color5: '"cyan"'
+    color6: '"magenta"'
+    color7: '"yellow"'
+    color8: '"dark red"'
+    color9: '"dark green"'
+    label: Nivel relativo
+    label1: Tx
+    label10: ''
+    label2: Canal
+    label3: Ruido
+    label4: Tono
+    label5: ''
+    label6: ''
+    label7: ''
+    label8: ''
+    label9: ''
+    width1: '1'
+    width10: '1'
+    width2: '1'
+    width3: '1'
+    width4: '1'
+    width5: '1'
+    width6: '1'
+    width7: '1'
+    width8: '1'
+    width9: '1'
+    name: '"PSD: Tx, canal, ruido y tono"'
+    vlen: fft_size
+    x_start: -samp_rate/2000
+    x_step: samp_rate/fft_size/1000
+    x_axis_label: '"Frecuencia (kHz)"'
+    y_axis_label: '"PSD (dB re u^2/Hz)"'
+    x_units: '""'
+    y_units: '""'
+    ref_level: '-200'
+    grid: 'True'
+    autoscale: 'False'
+    average: '1.0'
+    ymin: '-120'
+    ymax: '0'
+    nconnections: '4'
+    update_time: '0.1'
+    showports: 'False'
+    gui_hint: vistas@3:0,0,1,1
+    legend: 'True'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 896
+    - 1616
+    rotation: 0
+    state: enabled
+- name: nota_tx
+  id: note
+  parameters:
+    note: 1. Tx y canal
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 256
+    rotation: 0
+    state: enabled
+- name: nota_rx
+  id: note
+  parameters:
+    note: 2. Receptor
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 664
+    rotation: 0
+    state: enabled
+- name: nota_bits
+  id: note
+  parameters:
+    note: 3. Bits y BER
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 1008
+    rotation: 0
+    state: enabled
+- name: nota_psd
+  id: note
+  parameters:
+    note: 4. PSD por Hz
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 1320
+    rotation: 0
+    state: enabled
+- name: nota_config
+  id: note
+  parameters:
+    note: 'beta/span: reiniciar'
+    comment: ''
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 192
+    rotation: 0
+    state: enabled
+- name: enviar_bits_tx
+  id: virtual_sink
+  parameters:
+    stream_id: bits_tx
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 296
+    - 456
+    rotation: 0
+    state: enabled
+- name: recibir_bits_tx_comparar_bits
+  id: virtual_source
+  parameters:
+    stream_id: bits_tx
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 784
+    - 1016
+    rotation: 0
+    state: enabled
+- name: recibir_bits_tx_bits_tx_float
+  id: virtual_source
+  parameters:
+    stream_id: bits_tx
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 1080
+    rotation: 0
+    state: enabled
+- name: enviar_bits_rx
+  id: virtual_sink
+  parameters:
+    stream_id: bits_rx
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1392
+    - 752
+    rotation: 0
+    state: enabled
+- name: recibir_bits_rx_comparar_bits
+  id: virtual_source
+  parameters:
+    stream_id: bits_rx
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 784
+    - 1120
+    rotation: 0
+    state: enabled
+- name: recibir_bits_rx_bits_rx_float
+  id: virtual_source
+  parameters:
+    stream_id: bits_rx
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 1176
+    rotation: 0
+    state: enabled
+- name: enviar_errores
+  id: virtual_sink
+  parameters:
+    stream_id: errores
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1320
+    - 1184
+    rotation: 0
+    state: enabled
+- name: recibir_errores_comparacion_bits
+  id: virtual_source
+  parameters:
+    stream_id: errores
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 208
+    - 1256
+    rotation: 0
+    state: enabled
+- name: enviar_canal
+  id: virtual_sink
+  parameters:
+    stream_id: canal
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1680
+    - 328
+    rotation: 0
+    state: enabled
+- name: recibir_canal_root_raised_cosine_filter_0_0
+  id: virtual_source
+  parameters:
+    stream_id: canal
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 760
+    rotation: 0
+    state: enabled
+- name: recibir_canal_qtgui_time_sink_x_0
+  id: virtual_source
+  parameters:
+    stream_id: canal
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1600
+    - 832
+    rotation: 0
+    state: enabled
+- name: recibir_canal_psd_canal
+  id: virtual_source
+  parameters:
+    stream_id: canal
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 512
+    - 1400
+    rotation: 0
+    state: enabled
+- name: enviar_rx_filtrado
+  id: virtual_sink
+  parameters:
+    stream_id: rx_filtrado
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 424
+    - 840
+    rotation: 0
+    state: enabled
+- name: recibir_rx_filtrado_qtgui_time_sink_x_0
+  id: virtual_source
+  parameters:
+    stream_id: rx_filtrado
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1600
+    - 928
+    rotation: 0
+    state: enabled
+- name: enviar_tx_rrc
+  id: virtual_sink
+  parameters:
+    stream_id: tx_rrc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 976
+    - 520
+    rotation: 0
+    state: enabled
+- name: recibir_tx_rrc_psd_tx
+  id: virtual_source
+  parameters:
+    stream_id: tx_rrc
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 16
+    - 1400
+    rotation: 0
+    state: enabled
+- name: enviar_ruido
+  id: virtual_sink
+  parameters:
+    stream_id: ruido
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1136
+    - 592
+    rotation: 0
+    state: enabled
+- name: recibir_ruido_psd_ruido
+  id: virtual_source
+  parameters:
+    stream_id: ruido
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1008
+    - 1400
+    rotation: 0
+    state: enabled
+- name: enviar_tono
+  id: virtual_sink
+  parameters:
+    stream_id: tono
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1576
+    - 608
+    rotation: 0
+    state: enabled
+- name: recibir_tono_psd_tono
+  id: virtual_source
+  parameters:
+    stream_id: tono
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate:
+    - 1504
+    - 1400
+    rotation: 0
+    state: enabled
+connections:
+- - alinear_rx
+  - '0'
+  - muestrear
+  - '0'
+- - analog_noise_source_x_0
+  - '0'
+  - blocks_add_xx_1
+  - '1'
+- - analog_sig_source_x_0
+  - '0'
+  - blocks_add_xx_0
+  - '1'
+- - ber_media
+  - '0'
+  - qtgui_number_sink_0
+  - '0'
+- - blocks_add_xx_1
+  - '0'
+  - blocks_add_xx_0
+  - '0'
+- - blocks_complex_to_mag_0
+  - '0'
+  - blocks_threshold_ff_0
+  - '0'
+- - blocks_threshold_ff_0
+  - '0'
+  - blocks_float_to_uchar_0
+  - '0'
+- - comparar_bits
+  - '0'
+  - errores_float
+  - '0'
+- - digital_chunks_to_symbols_xx_0
+  - '0'
+  - qtgui_const_sink_x_0_0
+  - '0'
+- - digital_chunks_to_symbols_xx_0
+  - '0'
+  - root_raised_cosine_filter_0
+  - '0'
+- - errores_float
+  - '0'
+  - ber_media
+  - '0'
+- - muestrear
+  - '0'
+  - blocks_complex_to_mag_0
+  - '0'
+- - muestrear
+  - '0'
+  - qtgui_const_sink_x_0
+  - '0'
+- - root_raised_cosine_filter_0
+  - '0'
+  - qtgui_time_sink_x_0_0
+  - '0'
+- - root_raised_cosine_filter_0
+  - '0'
+  - throttle_0
+  - '0'
+- - root_raised_cosine_filter_0_0
+  - '0'
+  - alinear_rx
+  - '0'
+- - throttle_0
+  - '0'
+  - blocks_add_xx_1
+  - '0'
+- - analog_random_source_x_0
+  - '0'
+  - bits_to_symbols
+  - '0'
+- - bits_to_symbols
+  - '0'
+  - digital_chunks_to_symbols_xx_0
+  - '0'
+- - blocks_add_xx_0
+  - '0'
+  - constelacion_canal
+  - '0'
+- - root_raised_cosine_filter_0_0
+  - '0'
+  - ojo_componente_i
+  - '0'
+- - ojo_componente_i
+  - '0'
+  - ojo
+  - '0'
+- - bits_tx_float
+  - '0'
+  - comparacion_bits
+  - '0'
+- - bits_rx_float
+  - '0'
+  - comparacion_bits
+  - '1'
+- - psd_tx
+  - '0'
+  - vista_psd
+  - '0'
+- - psd_canal
+  - '0'
+  - vista_psd
+  - '1'
+- - psd_ruido
+  - '0'
+  - vista_psd
+  - '2'
+- - psd_tono
+  - '0'
+  - vista_psd
+  - '3'
+- - bits_to_symbols
+  - '0'
+  - enviar_bits_tx
+  - '0'
+- - recibir_bits_tx_comparar_bits
+  - '0'
+  - comparar_bits
+  - '0'
+- - recibir_bits_tx_bits_tx_float
+  - '0'
+  - bits_tx_float
+  - '0'
+- - blocks_float_to_uchar_0
+  - '0'
+  - enviar_bits_rx
+  - '0'
+- - recibir_bits_rx_comparar_bits
+  - '0'
+  - comparar_bits
+  - '1'
+- - recibir_bits_rx_bits_rx_float
+  - '0'
+  - bits_rx_float
+  - '0'
+- - errores_float
+  - '0'
+  - enviar_errores
+  - '0'
+- - recibir_errores_comparacion_bits
+  - '0'
+  - comparacion_bits
+  - '2'
+- - blocks_add_xx_0
+  - '0'
+  - enviar_canal
+  - '0'
+- - recibir_canal_root_raised_cosine_filter_0_0
+  - '0'
+  - root_raised_cosine_filter_0_0
+  - '0'
+- - recibir_canal_qtgui_time_sink_x_0
+  - '0'
+  - qtgui_time_sink_x_0
+  - '0'
+- - recibir_canal_psd_canal
+  - '0'
+  - psd_canal
+  - '0'
+- - root_raised_cosine_filter_0_0
+  - '0'
+  - enviar_rx_filtrado
+  - '0'
+- - recibir_rx_filtrado_qtgui_time_sink_x_0
+  - '0'
+  - qtgui_time_sink_x_0
+  - '1'
+- - root_raised_cosine_filter_0
+  - '0'
+  - enviar_tx_rrc
+  - '0'
+- - recibir_tx_rrc_psd_tx
+  - '0'
+  - psd_tx
+  - '0'
+- - analog_noise_source_x_0
+  - '0'
+  - enviar_ruido
+  - '0'
+- - recibir_ruido_psd_ruido
+  - '0'
+  - psd_ruido
+  - '0'
+- - analog_sig_source_x_0
+  - '0'
+  - enviar_tono
+  - '0'
+- - recibir_tono_psd_tono
+  - '0'
+  - psd_tono
+  - '0'
+metadata:
+  file_format: 1
+  grc_version: 3.10.12.0
